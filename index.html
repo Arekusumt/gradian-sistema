@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gradian — Cómo funciona el sistema</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='24' y1='76' x2='80' y2='26' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%232DD4BF'/%3E%3Cstop offset='1' stop-color='%236366F1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='none' stroke='url(%23g)' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='30' y1='72' x2='80' y2='26'/%3E%3Cpath d='M60 29 L80 26 L74 45'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1220; --panel:#101a30; --panel-2:#0e1628; --line:rgba(148,163,184,.16);
+    --text:#cbd5e1; --muted:#94a3b8; --head:#f1f5f9;
+    --teal:#2DD4BF; --indigo:#818CF8; --indigo-strong:#6366F1; --violet:#a78bfa; --amber:#fbbf24;
+    --grad:linear-gradient(48deg,#2DD4BF,#6366F1);
+    --ok:#34d399; --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font:400 16px/1.6 'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:'Space Grotesk','Inter',sans-serif;color:var(--head);line-height:1.14;letter-spacing:-.015em}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  section{padding:72px 0;border-top:1px solid var(--line)}
+  .overline{font:600 12px/1 'Inter',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
+  .lead{color:var(--muted);max-width:70ch}
+  a{color:var(--indigo)}
+
+  /* ---------- hero ---------- */
+  header.hero{padding:64px 0 56px;border:none;position:relative;overflow:hidden}
+  header.hero::before{content:"";position:absolute;inset:-40% -20% auto;height:130%;
+    background:radial-gradient(600px 340px at 78% 8%,rgba(99,102,241,.16),transparent 65%),
+               radial-gradient(520px 300px at 12% 0%,rgba(45,212,191,.10),transparent 60%);pointer-events:none}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:44px}
+  .brand svg{width:34px;height:34px}
+  .brand b{font-family:'Space Grotesk';font-size:19px;color:var(--head);letter-spacing:-.01em}
+  .brand span{color:var(--muted);font-size:13px;border-left:1px solid var(--line);padding-left:12px}
+  h1{font-size:clamp(34px,5vw,54px);max-width:20ch}
+  h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.sub{margin:18px 0 34px;font-size:18px;color:var(--muted);max-width:62ch}
+  .chips{display:flex;flex-wrap:wrap;gap:12px}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;min-width:150px}
+  .chip .n{font:600 26px/1.1 var(--mono);color:var(--head)}
+  .chip .n em{font-style:normal;color:var(--teal)}
+  .chip .l{font-size:12.5px;color:var(--muted);margin-top:4px}
+
+  /* ---------- 60 segundos ---------- */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;position:relative}
+  .step .num{font:600 13px var(--mono);color:var(--teal)}
+  .step h3{font-size:17px;margin:8px 0 6px}
+  .step p{font-size:14px;color:var(--muted)}
+  .step:not(:last-child)::after{content:"→";position:absolute;right:-16px;top:44%;color:var(--indigo);font-size:18px;z-index:2}
+  .step.human{border-color:rgba(45,212,191,.45);box-shadow:0 0 0 1px rgba(45,212,191,.18) inset}
+
+  /* ---------- MAPA DE NODOS ---------- */
+  #mapa{padding-bottom:36px}
+  .mapbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:26px 0 12px}
+  .mapbar input[type=search]{flex:1;min-width:200px;max-width:340px;background:var(--panel);border:1px solid var(--line);
+    border-radius:10px;color:var(--head);font:500 14px 'Inter';padding:10px 14px;outline:none}
+  .mapbar input[type=search]:focus{border-color:var(--indigo)}
+  .mbtn{background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--text);
+    font:600 13px 'Inter';padding:9px 14px;cursor:pointer;transition:.15s}
+  .mbtn:hover{border-color:var(--indigo);color:var(--head)}
+  .mbtn.flow{border-color:rgba(45,212,191,.4);color:var(--teal)}
+  .legend{display:flex;gap:6px 14px;flex-wrap:wrap;margin:0 0 12px}
+  .lg{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer;user-select:none}
+  .lg input{accent-color:#6366F1}
+  .lg .sw{width:12px;height:12px;border-radius:4px;display:inline-block}
+  .mapframe{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:radial-gradient(1200px 700px at 50% 0%,#0e1830 0%,#0B1220 70%)}
+  #svgmap{display:block;width:100%;height:min(78vh,860px);cursor:grab;touch-action:none}
+  #svgmap.grabbing{cursor:grabbing}
+  .zoomui{position:absolute;right:14px;top:14px;display:flex;flex-direction:column;gap:6px;z-index:5}
+  .zoomui button{width:38px;height:38px;border-radius:10px;background:rgba(16,26,48,.9);border:1px solid var(--line);
+    color:var(--head);font:600 17px var(--mono);cursor:pointer}
+  .zoomui button:hover{border-color:var(--indigo)}
+  .maphint{position:absolute;left:14px;bottom:12px;font-size:11.5px;color:#64748b;z-index:5;
+    background:rgba(11,18,32,.72);padding:4px 10px;border-radius:8px}
+  /* zonas */
+  .zone-rect{fill:rgba(148,163,184,.03);stroke:rgba(148,163,184,.18);stroke-dasharray:4 6;rx:20}
+  .zone-label{font:600 13px 'Space Grotesk';fill:#8b9cbd;letter-spacing:.1em;text-transform:uppercase}
+  .zone-count{font:600 10px 'JetBrains Mono';fill:#5b6b8c}
+  /* aristas */
+  .edge{fill:none;stroke:#3a4a6b;stroke-width:1.4;opacity:.8}
+  .edge.k-flow{stroke:#6366F1;stroke-width:2}
+  .edge.k-gate{stroke:#2DD4BF;stroke-width:2}
+  .edge.k-guard{stroke:#fbbf24;stroke-width:2}
+  .edge.k-del{stroke:#4c5c80;stroke-dasharray:3 6;opacity:.22}
+  .edge.k-ext{stroke:#64748b;stroke-dasharray:2 6;opacity:.25}
+  .edge.k-optin{stroke:#a78bfa;stroke-dasharray:6 6;opacity:.4}
+  .edge.k-fb{stroke:#2DD4BF;stroke-dasharray:7 7;opacity:.28}
+  /* nodos */
+  .node{cursor:pointer}
+  .node rect{stroke-width:1.4;transition:filter .15s}
+  .node text{pointer-events:none}
+  .n-label{font:600 12.5px 'JetBrains Mono';fill:#e6edf7}
+  .n-ico{font-size:15px}
+  .t-agent rect{fill:#111c34;stroke:#41537d}
+  .t-skill rect{fill:#0d1526;stroke:rgba(76,92,128,.35)}
+  .t-skill .n-label{font-size:10.5px;fill:#9fb0cf}
+  .t-skill .n-ico{font-size:10px}
+  .t-cmd rect{fill:#131b2e;stroke:#4c5f8a}
+  .t-cmd .n-label{fill:#c7d2fe}
+  .t-hook rect{fill:#1d1a10;stroke:#8a6d1f}
+  .t-hook .n-label{fill:#fde68a}
+  .t-ext rect{fill:#0f1626;stroke:#42506e;stroke-dasharray:4 3}
+  .t-data rect{fill:#0f1e29;stroke:#155e56}
+  .t-data .n-label{fill:#99f6e4}
+  .t-out rect{fill:#101f1a;stroke:#1d6b52}
+  .t-out .n-label{fill:#a7f3d0}
+  .t-infra rect{fill:#0e1424;stroke:#374468}
+  .t-hub rect{fill:#111c34;stroke:url(#gradStroke);stroke-width:2.2}
+  .t-alex rect{fill:#0d2622;stroke:#2DD4BF;stroke-width:2.4;filter:drop-shadow(0 0 10px rgba(45,212,191,.25))}
+  .t-alex .n-label{font-size:15px;fill:#ecfdf5}
+  .t-alex .n-ico{font-size:19px}
+  .t-loop rect{fill:#161129;stroke:#7c5bd6}
+  .t-loop .n-label{fill:#ddd0ff}
+  .node:hover rect,.node.sel rect{filter:drop-shadow(0 0 7px rgba(129,140,248,.65))}
+  .node.sel rect{stroke:#818CF8;stroke-width:2.2}
+  svg .dim{opacity:.1;transition:opacity .15s}
+  svg .hi{opacity:1 !important}
+  .edge.hi{stroke-width:2.6}
+  .edge.pulse{stroke:#2DD4BF;stroke-width:3.4;opacity:1;stroke-dasharray:10 8;animation:dashmove .5s linear infinite}
+  @keyframes dashmove{to{stroke-dashoffset:-18}}
+  /* panel de detalle */
+  .npanel{position:absolute;top:14px;left:14px;width:min(360px,86%);max-height:calc(100% - 28px);overflow:auto;
+    background:rgba(13,20,38,.96);border:1px solid var(--indigo);border-radius:14px;padding:18px 20px;z-index:6;display:none}
+  .npanel.on{display:block;animation:fade .18s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  .npanel .cls{position:absolute;top:10px;right:12px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer}
+  .npanel .tt{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+  .npanel h3{font:600 17px var(--mono);margin:4px 0 8px;color:var(--head)}
+  .npanel p{font-size:13.5px;color:var(--text)}
+  .npanel .cons{margin-top:12px;font-size:12px;color:var(--muted)}
+  .npanel .cons b{color:#c7d2fe;font-weight:600}
+  .npanel .cons a{cursor:pointer;text-decoration:underline dotted}
+
+  /* ---------- resto de secciones ---------- */
+  .rails{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:30px}
+  .rail{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:12px;padding:18px 20px}
+  .rail h3{font-size:15.5px}
+  .rail code{font:600 12px var(--mono);color:var(--indigo)}
+  .rail p{font-size:13.5px;color:var(--muted);margin-top:6px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px;margin-top:30px}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .kpi .n{font:600 30px/1.05 var(--mono);color:var(--head)}
+  .kpi .n small{font-size:16px;color:var(--muted)}
+  .kpi .l{font-size:13px;color:var(--muted);margin-top:6px}
+  .cost{margin-top:22px;background:linear-gradient(180deg,rgba(45,212,191,.07),rgba(99,102,241,.07));
+        border:1px solid var(--line);border-radius:16px;padding:26px 28px;display:flex;gap:36px;flex-wrap:wrap;align-items:center}
+  .cost .big{font:600 34px var(--mono);color:var(--head)}
+  .cost .big.ok{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .cost .cl{font-size:13px;color:var(--muted);margin-top:4px;max-width:34ch}
+  .cost .vs{font:600 18px var(--mono);color:var(--muted)}
+  .fine{font-size:12px;color:#64748b;margin-top:14px;max-width:90ch}
+  .res{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:30px}
+  .re{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .re h3{font-size:16px}
+  .re .tag{font:600 10.5px var(--mono);color:var(--ok);border:1px solid rgba(52,211,153,.4);border-radius:6px;padding:2px 8px;display:inline-block;margin-bottom:10px}
+  .re .tag.p{color:var(--violet);border-color:rgba(167,139,250,.4)}
+  .re p{font-size:13.5px;color:var(--muted);margin-top:6px}
+  footer{border-top:1px solid var(--line);padding:56px 0 64px}
+  footer .cta{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+  footer h2{font-size:26px;max-width:24ch}
+  .btn{display:inline-block;background:var(--grad);color:#0B1220;font:600 15px 'Inter';padding:14px 26px;border-radius:12px;text-decoration:none}
+  footer .who{margin-top:34px;color:var(--muted);font-size:13.5px;display:flex;gap:10px;align-items:center}
+  footer .who svg{width:20px;height:20px}
+  @media(max-width:860px){
+    .steps{grid-template-columns:1fr 1fr}
+    .step:not(:last-child)::after{display:none}
+    .cost{gap:18px}
+    #svgmap{height:70vh}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 100 100" role="img" aria-label="Gradian"><defs><linearGradient id="g1" gradientUnits="userSpaceOnUse" x1="24" y1="76" x2="80" y2="26"><stop offset="0" stop-color="#2DD4BF"/><stop offset="1" stop-color="#6366F1"/></linearGradient></defs><circle cx="24" cy="76" r="6.2" fill="none" stroke="url(#g1)" stroke-width="3.4"/><g fill="none" stroke="url(#g1)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><line x1="35" y1="66" x2="80" y2="26"/><path d="M62.5 30.3 L80 26 L73.7 42.9"/></g></svg>
+      <b>Gradian</b><span>Digital Growth · mapa del sistema</span>
+    </div>
+    <h1>Una persona. <span class="g">Una oficina de 27 agentes de IA.</span></h1>
+    <p class="sub">Así funciona el sistema que investiga negocios locales, fabrica su material de venta
+    (auditorías, webs de demostración, marca, contenido para redes) y lo deja listo para revisar.
+    <strong style="color:var(--head)">Nada se envía ni se publica solo: la última palabra siempre es humana.</strong></p>
+    <div class="chips">
+      <div class="chip"><div class="n">27</div><div class="l">agentes especialistas</div></div>
+      <div class="chip"><div class="n">23</div><div class="l">procedimientos (skills)</div></div>
+      <div class="chip"><div class="n"><em>2.480</em>&hairsp;M</div><div class="l">tokens procesados en 18 días</div></div>
+      <div class="chip"><div class="n">~0&thinsp;€</div><div class="l">coste marginal por pieza</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="sesenta">
+  <div class="wrap">
+    <div class="overline">En 60 segundos</div>
+    <h2>Qué entra, qué sale y quién decide</h2>
+    <div class="steps">
+      <div class="step"><div class="num">01</div><h3>Entra un negocio local</h3><p>El sistema lo encuentra, comprueba que está abierto y puntúa si encaja (web floja, sin reservas, redes muertas…).</p></div>
+      <div class="step"><div class="num">02</div><h3>La oficina produce</h3><p>Auditoría con la oportunidad en €, web de demostración con su marca real, identidad, contenido para Instagram/TikTok.</p></div>
+      <div class="step"><div class="num">03</div><h3>Controles automáticos</h3><p>Todo pasa filtros de calidad: revisión de conversión (mínimo 80/100), QA técnico y críticos visuales que puntúan cada pieza.</p></div>
+      <div class="step human"><div class="num">04</div><h3>Un humano aprueba</h3><p>El material espera en una cola de aprobación. Alex revisa, edita si hace falta y <strong>envía a mano</strong>. Siempre.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="mapa">
+  <div class="wrap">
+    <div class="overline">El mapa completo</div>
+    <h2>Todos los nodos, todas las conexiones</h2>
+    <p class="lead" style="margin-top:12px">Cada pieza del sistema es un nodo: <strong style="color:var(--head)">27 agentes, 23 skills,
+    9 comandos, 4 bloqueos, las conexiones externas, los datos y las salidas</strong>. Arrastra para moverte, usa la rueda para hacer
+    zoom, pasa el ratón para ver las conexiones de cada nodo y haz clic para el detalle.</p>
+
+    <div class="legend" id="legend"></div>
+
+    <div class="mapbar">
+      <input type="search" id="q" placeholder="Buscar nodo… (p. ej. reel, auditor, guard)">
+      <button class="mbtn flow" id="flowLead">▶ Recorrido de un lead</button>
+      <button class="mbtn flow" id="flowReel">▶ Recorrido de un reel</button>
+      <button class="mbtn" id="resetBtn">Restablecer</button>
+    </div>
+
+    <div class="mapframe">
+      <svg id="svgmap" role="img" aria-label="Mapa de nodos del sistema Gradian">
+        <defs>
+          <linearGradient id="gradStroke" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0" stop-color="#2DD4BF"/><stop offset="1" stop-color="#6366F1"/>
+          </linearGradient>
+          <marker id="arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="#55658c"/>
+          </marker>
+        </defs>
+        <g id="viewport"></g>
+      </svg>
+      <div class="zoomui">
+        <button id="zin" title="Acercar">+</button>
+        <button id="zout" title="Alejar">−</button>
+        <button id="zfit" title="Ver todo" style="font-size:12px">⤢</button>
+      </div>
+      <div class="npanel" id="npanel"><button class="cls" id="pclose">✕</button><div id="pbody"></div></div>
+      <div class="maphint">arrastra para moverte · rueda / pellizco para zoom · clic en un nodo para el detalle</div>
+    </div>
+    <p class="fine" style="margin-top:10px" id="mapcount"></p>
+  </div>
+</section>
+
+<section id="rails">
+  <div class="wrap">
+    <div class="overline">Los guardarraíles</div>
+    <h2>Diseñado para que la máquina no pueda pasarse de la raya</h2>
+    <div class="rails">
+      <div class="rail"><h3><code>guard_send</code> · anti-envío</h3><p>Un interceptor bloquea cualquier intento de enviar emails o WhatsApp reales desde el sistema. El envío es siempre manual (RGPD + reputación del dominio).</p></div>
+      <div class="rail"><h3><code>guard_publish</code> · anti-publicación</h3><p>Lo mismo para redes sociales: el contenido llega a una cola; publicar o programar es decisión humana, pieza a pieza.</p></div>
+      <div class="rail"><h3>CRO ≥ 80 + críticos visuales</h3><p>Ningún material de venta sale sin pasar por el experto en conversión (mínimo 80/100). Los reels y carruseles tienen además críticos que miran el resultado renderizado.</p></div>
+      <div class="rail"><h3>Tests de integridad en CI</h3><p>92 comprobaciones automáticas verifican que agentes, skills y guardarraíles siguen bien conectados en cada cambio. Los datos de contactos viven fuera del repositorio.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="numeros">
+  <div class="wrap">
+    <div class="overline">La máquina en números</div>
+    <h2>Datos reales de uso — 18 días de trabajo</h2>
+    <p class="lead" style="margin-top:12px">Medido sobre los registros de sesión del propio sistema (14 jun → 2 jul 2026), no estimado.</p>
+    <div class="kpis">
+      <div class="kpi"><div class="n" data-count="74">0</div><div class="l">sesiones de trabajo</div></div>
+      <div class="kpi"><div class="n" data-count="8312">0</div><div class="l">llamadas al modelo de IA</div></div>
+      <div class="kpi"><div class="n" data-count="10542">0</div><div class="l">usos de herramientas (código, navegador, ficheros)</div></div>
+      <div class="kpi"><div class="n" data-count="232">0</div><div class="l">delegaciones a agentes especialistas</div></div>
+      <div class="kpi"><div class="n" data-count="2483" data-suffix="&hairsp;M">0</div><div class="l">tokens procesados en total</div></div>
+      <div class="kpi"><div class="n" data-count="97" data-suffix="%">0</div><div class="l">servidos desde caché — la clave de la eficiencia</div></div>
+    </div>
+    <div class="cost">
+      <div><div class="big">~2.070&nbsp;US$</div><div class="cl">costaría este uso a precios de lista de la API</div></div>
+      <div class="vs">vs</div>
+      <div><div class="big ok">tarifa plana</div><div class="cl">coste real: suscripción mensual fija + herramientas locales gratuitas (render, vídeo, voz IA)</div></div>
+      <div><div class="big">~0&nbsp;€</div><div class="cl">coste marginal de producir una pieza más</div></div>
+    </div>
+    <p class="fine">Metodología: tokens agregados de los registros de sesión con deduplicación por mensaje; coste equivalente calculado a precios de lista por millón de tokens (entrada, salida, escritura y lectura de caché). El 97% del volumen son lecturas de caché a ~0,1× el precio de entrada: sin esa arquitectura, el mismo uso rondaría los 13.000&nbsp;US$.</p>
+    <p style="margin-top:16px;font-size:15px;color:var(--muted)">Todos estos registros se pueden consultar en directo sobre el propio sistema, pantalla en mano.</p>
+  </div>
+</section>
+
+<section id="resultados">
+  <div class="wrap">
+    <div class="overline">Resultados</div>
+    <h2>Qué ha producido ya</h2>
+    <div class="res">
+      <div class="re"><span class="tag">CLIENTE REAL</span><h3>The Waterfront (pub irlandés)</h3><p>Web con analítica sin cookies, identidad de marca completa, carta QR para grabar en madera y vídeo de anuncio para Instagram.</p></div>
+      <div class="re"><span class="tag">CLIENTE REAL</span><h3>Inmocasa (inmobiliaria)</h3><p>Rebranding + web de 378 páginas en 7 idiomas con motor de fichas premium, embudo de propietarios y kit de compliance.</p></div>
+      <div class="re"><span class="tag p">PIPELINE</span><h3>80 prospectos preparados</h3><p>Auditorías con la oportunidad en €, demos con la marca real de cada negocio y borradores de contacto listos para revisar.</p></div>
+      <div class="re"><span class="tag p">PRODUCTO PROPIO</span><h3>Web + estudio de contenido</h3><p>gradiangrowth.com en 3 idiomas (accesibilidad 100/100) y una fábrica de reels y carruseles que se critica y mejora a sí misma.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cta">
+      <h2>Hecho para enseñar cómo trabaja Gradian por dentro.</h2>
+      <div style="font-size:14px;color:var(--muted)">¿Preguntas sobre alguna pieza?
+        <a href="mailto:alex@gradiangrowth.com" style="font-weight:600">alex@gradiangrowth.com</a></div>
+    </div>
+    <div class="who">
+      <svg viewBox="0 0 100 100" role="img" aria-hidden="true"><defs><linearGradient id="g2" gradientUnits="userSpaceOnUse" x1="24" y1="76" x2="80" y2="26"><stop offset="0" stop-color="#2DD4BF"/><stop offset="1" stop-color="#6366F1"/></linearGradient></defs><circle cx="24" cy="76" r="6.2" fill="none" stroke="url(#g2)" stroke-width="3.4"/><g fill="none" stroke="url(#g2)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><line x1="35" y1="66" x2="80" y2="26"/><path d="M62.5 30.3 L80 26 L73.7 42.9"/></g></svg>
+      <span><strong style="color:var(--head)">Gradian — Digital Growth</strong> · gradiangrowth.com · Diseñado y dirigido por una persona; ejecutado por una oficina de agentes de IA. Crecimiento, calculado.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   MAPA DE NODOS v3 — iconos + rutas ortogonales estilo metro
+   nodo: [id, tipo, x, y, icono, etiqueta, descripción, w?]
+===================================================================== */
+const N = [
+ /* --- eje central --- */
+ ["negocio","hub",120,830,"🏪","Negocio local","La materia prima: un restaurante, una clínica, una inmobiliaria… con presencia digital floja. El sistema lo encuentra, lo estudia y fabrica todo lo que necesitaría — antes de contactarlo.",180],
+ ["alex","alex",2120,830,"🧑‍💼","ALEX","El humano al mando. Dispara el trabajo con 9 comandos, revisa TODO lo que la máquina deja en la cola y es el único que puede enviar, publicar o desplegar. La máquina propone; él dispone.",150],
+ ["cua","hub",1830,830,"📥","COLA DE APROBACIÓN","El único punto de salida del sistema. Cada día se llena con paquetes listos para revisar: auditorías + demos + borradores de contacto, o el mes de contenido de un cliente. Alex marca sí / no / editar.",230],
+
+ /* --- comandos --- */
+ ["c_motor","cmd",330,300,"⚡","/motor","Corre el motor de captación del día: sourcing → scoring → auditoría → borradores → cola."],
+ ["c_auditoria","cmd",560,300,"⚡","/auditoria","Construye la auditoría de venta (PDF + teaser) de un prospecto concreto."],
+ ["c_novademo","cmd",790,300,"⚡","/nova-demo","Construye una demo web con la marca real de un negocio."],
+ ["c_oficina","cmd",1020,300,"⚡","/oficina","El office-manager mira CRM y cola, elige las 3 tareas de más impacto y las reparte."],
+ ["c_marca","cmd",1250,300,"⚡","/marca-client","Identidad completa de un cliente: brand book + spec + piezas de imprenta con QR."],
+ ["c_contingut","cmd",1480,300,"⚡","/contingut","Produce el mes de contenido social de un cliente y lo deja en la cola."],
+ ["c_reels","cmd",1710,300,"⚡","/reels","Un ciclo de la Reel Factory: producir → criticar → mejorar. Con /loop, va sola."],
+ ["c_millora","cmd",1940,300,"⚡","/millora","Una tanda de I+D interno: mejorar agentes, skills y entregables."],
+ ["c_retro","cmd",2170,300,"⚡","/retro","Retrospectiva con datos: qué funcionó, qué no, y propuestas de cambio."],
+
+ /* --- desk captación --- */
+ ["office","agent",420,470,"🗂️","office-manager","Orquesta el día: mira el CRM y la cola, decide las 3 tareas de más impacto y las reparte a los especialistas. Deja el resumen del día escrito."],
+ ["prospector","agent",690,470,"🔭","prospector","Encuentra negocios con dinero y presencia digital floja (Google Places), comprueba que están abiertos y los puntúa A/B/C. Los A entran al CRM. Nunca contacta a nadie."],
+ ["auditor","agent",960,470,"🔬","auditor","Investiga al prospecto (web, SEO, reseñas, competidores) y construye la auditoría PDF con la oportunidad en €/año — con supuestos conservadores — más el teaser visual."],
+ ["webdes","agent",420,600,"🎨","web-designer","Construye la demo web del prospecto con su marca REAL (logo, colores, carta, fotos), iterando con capturas de navegador. El «ver antes de creer» de Gradian."],
+ ["copyw","agent",690,600,"✍️","copywriter","Redacta el primer email/WhatsApp y los seguimientos (+3/+7 días), citando la brecha en € que encontró el auditor. Solo borradores: enviar es cosa de Alex."],
+ ["brand","agent",960,600,"🖌️","brand-designer","La identidad entregable: brand book, brand spec, mockups, logo de redes y piezas de imprenta (tótem-carta QR, QR de reseñas). Siempre en versión limpia + versión muestra."],
+
+ /* --- skills captación --- */
+ ["s_motorcap","skill",420,720,"⚙","motor-captacio","El procedimiento del bucle diario de captación completo."],
+ ["s_gaudit","skill",690,720,"⚙","generador-auditories","Cómo se construye una auditoría de 8 secciones + teaser."],
+ ["s_compweb","skill",960,720,"⚙","comparativa-web","Si ya tienen web: qué están perdiendo, medido (Lighthouse, SEO, conversión)."],
+ ["s_demo","skill",420,775,"⚙","demo-web-express","Cómo se monta una demo centrada en conversión, móvil-first."],
+ ["s_marca","skill",690,775,"⚙","marca-client","Cómo se genera el brand book + spec desde los tokens de marca del cliente."],
+ ["s_print","skill",960,775,"⚙","disseny-impres","Piezas de imprenta y QR aptas para grabar en madera / imprimir."],
+ ["s_sisma","skill",1230,720,"⚙","sistema-de-marca","La identidad de Gradian (colores, tipos, tono) aplicada a todo lo que se produce."],
+ ["s_consell","skill",2120,700,"⚙","consell-gradian","El «consejo»: 3 votos independientes + síntesis para decisiones de Alex (¿este target vale? ¿email o visita?)."],
+
+ /* --- desk social --- */
+ ["estratega","agent",420,980,"🧭","social-estratega","Monta el calendario mensual tipado de un cliente: rotación de formatos garantizada (nunca dos iguales seguidos) y reutilización multi-canal."],
+ ["idea","agent",690,980,"⛏️","idea-miner","Busca contenido viral del nicho, extrae por qué funcionó y lo convierte en un banco de ángulos adaptables al cliente. Nunca copiados."],
+ ["trend","agent",960,980,"📡","reel-trend-analyst","Investiga el «meta» actual de Reels/TikTok/Shorts: hooks, ritmo, duración, formatos. Deja un brief de tendencias fechado y con fuentes."],
+ ["scopy","agent",420,1110,"✍️","social-copywriter","Escribe cada pieza completa: 3 ganchos para A/B, guión o slides, caption, hashtags, texto en pantalla y alt-text. Todo en un formato que la producción consume."],
+ ["cardes","agent",690,1110,"🖼️","carousel-designer","Renderiza 8–10 diapositivas de marca (1080×1350) con las fuentes y colores reales del cliente, con Chrome. Coste por pieza: 0 €."],
+ ["vprod","agent",960,1110,"🎬","video-producer","Produce los reels: motion graphics de marca, voz en off sintetizada localmente, subtítulos karaoke sincronizados. El vídeo IA de pago es opt-in con presupuesto aprobado."],
+ ["story","agent",420,1240,"📲","story-architect","Secuencias de stories con arcos (problema → agitación → solución → CTA) y pistas de interacción (encuesta, pregunta, enlace)."],
+ ["reledit","agent",690,1240,"✂️","reel-editor","Convierte grabaciones reales del cliente en reels verticales subtitulados, transcribiendo en local (0 €)."],
+ ["sound","agent",960,1240,"🎧","sound-designer","Los efectos de sonido de los reels: whooshes, ticks y blips sincronizados que nunca tapan la voz. Mezcla final a −14 LUFS."],
+ ["factory","loop",690,1360,"♻️","REEL FACTORY","El bucle autónomo: produce un reel → el crítico lo puntúa → se aplican mejoras al motor → se registra la lección → siguiente ciclo. Corre solo con /loop /reels.",210],
+
+ /* --- skills social --- */
+ ["s_estudi","skill",1230,930,"⚙","estudi-social","El bucle completo del mes de contenido de un cliente."],
+ ["s_miner","skill",1230,985,"⚙","miner-virals","Cómo se minan virales y se convierten en ángulos propios."],
+ ["s_plani","skill",1230,1040,"⚙","planificador-contingut","El calendario tipado con rotación validada por código."],
+ ["s_guio","skill",1230,1095,"⚙","guio-social","El copy completo de cada pieza en formato máquina."],
+ ["s_carr","skill",1230,1150,"⚙","carrusel-express","Render de slides de marca vía Chrome headless."],
+ ["s_video","skill",1230,1205,"⚙","video-social","Reels 0 €: cards de marca + ffmpeg + escenas animadas."],
+ ["s_veu","skill",1230,1260,"⚙","veu-social","Voz IA local (Piper) + timings palabra a palabra para karaoke."],
+ ["s_stories","skill",1230,1315,"⚙","stories-seq","Stories en secuencia con arcos e interacción."],
+ ["s_editor","skill",1230,1370,"⚙","editor-reel","Auto-edición de grabaciones reales con Whisper local."],
+ ["s_motorreels","skill",690,1450,"⚙","motor-reels","El procedimiento del bucle de la Reel Factory."],
+ ["s_scheduler","skill",1830,1000,"⚙","scheduler-social","Cómo sale el contenido aprobado: manual garantizado o Metricool. Siempre tras aprobación."],
+
+ /* --- desk inmobiliario --- */
+ ["iweb","agent",420,1570,"🏘️","inmobiliari-web","Mantiene la web del cliente sincronizada con su catálogo real (CRM inmobiliario) y la reconstruye: 378 páginas en 7 idiomas en el caso Inmocasa."],
+ ["iseo","agent",690,1570,"📍","seo-immobiliari","SEO local: páginas de zona («pisos en venta en…»), datos estructurados, ficha de Google Business, Core Web Vitals."],
+ ["ianalista","agent",960,1570,"📊","analista-mercat-immobiliari","Valoraciones defendibles e informes de precios por barrio con datos de mercado reales. Alimenta el lead magnet de propietarios."],
+ ["iestager","agent",420,1700,"🛋️","estager-visual-immobiliari","Home staging virtual y realce de fotos para el stock difícil. Siempre etiquetado como «imagen simulada». La foto pro la hace un fotógrafo; esto la complementa."],
+ ["icaptador","agent",690,1700,"🧲","captador-immobiliari","El embudo: respuesta a leads <5 min, lead scoring, captación de PROPIETARIOS (tasación gratuita), nurturing y motor de reseñas."],
+ ["icompliance","agent",960,1700,"⚖️","compliance-immobiliari","Prepara el kit legal para revisión profesional: prevención de blanqueo (Ley 10/2010 + SEPBLAC), RGPD, contratos, hojas de visita."],
+ ["iinvest","agent",690,1830,"🕵️","investigador-immobiliari","Benchmarking continuo: qué hacen las mejores inmobiliarias de España y fuera, con cifras y fuentes. Alimenta a todo el desk con un banco de ideas."],
+ ["s_merch","skill",1230,1650,"⚙","merchandiser-immobiliari","El «reframe de oportunidad»: hacer vendible el piso difícil sin mentir."],
+
+ /* --- puertas de calidad --- */
+ ["closer","agent",1520,600,"📈","closer-cro","LA puerta de conversión: revisa números, jerarquía, copy, prueba social y CTAs de TODO material de venta. Por debajo de 80/100 no se entrega. Sin excepciones.",190],
+ ["qa","agent",1520,740,"✅","qa-auditor","El gatekeeper técnico: build, lint, Lighthouse, accesibilidad, consola. Devuelve APTO / NO APTO con evidencia. No arregla: audita.",190],
+ ["rcritic","agent",1520,1080,"🧐","reel-critic","Mira el reel renderizado fotograma a fotograma y lo puntúa contra una rúbrica (hook al primer segundo, legibilidad, marca, duración). Exige ≥ 80.",190],
+ ["ccritic","agent",1520,1220,"🧐","carousel-critic","Lo mismo para carruseles: portada que para el dedo, una idea por slide, contraste móvil, CTA final. ≥ 80 o se rehace.",190],
+ ["s_cro","skill",1520,485,"⚙","optimitzador-conversio","La rúbrica CRO de 7 palancas con umbral 80/100."],
+
+ /* --- I+D --- */
+ ["millora","agent",1830,1360,"🔧","millora-continua","El agente de I+D: audita el propio sistema, investiga buenas prácticas y aplica mejoras pequeñas y reversibles. Corre los tests de integridad tras cada cambio. Es el 27º agente — el que mejora a los otros 26.",210],
+ ["s_retro","skill",1830,1470,"⚙","retro-setmanal","Lee el CRM, calcula el embudo real y propone 3 mejoras concretas."],
+ ["s_retrosocial","skill",1830,1250,"⚙","retro-social","La señal aprobado/editado/rechazado de la cola → mejoras al banco de ángulos y a los prompts."],
+
+ /* --- conexiones externas --- */
+ ["places","ext",330,140,"🗺️","Google Places","Fuente del sourcing: nombre, web, teléfono, reseñas y estado (abierto/cerrado) de negocios por zona."],
+ ["playwright","ext",610,140,"🎭","Playwright","Un navegador real controlado por agentes: capturas para teasers, QA visual y verificación de webs clicando de verdad."],
+ ["fal","ext",890,140,"🎥","fal.ai (vídeo IA)","Generación de vídeo de pago (Kling/Veo). OPT-IN: solo con presupuesto aprobado por Alex; el gasto se reporta tras cada uso."],
+ ["context7","ext",1170,140,"📚","context7 (docs)","Documentación técnica viva de librerías y frameworks para no programar de memoria."],
+ ["vercel","ext",1450,140,"▲","Vercel","Despliegue: la web pública y las demos de prospecto (URLs demo-*, con noindex)."],
+ ["metricool","ext",1730,140,"🗓️","Metricool","Programación de redes vía OAuth de Alex. La máquina jamás tiene credenciales de las cuentas."],
+ ["drive","ext",2010,140,"☁️","Google Drive","La carpeta espejo diaria para revisar y enviar desde el móvil (mensaje + PDFs por lead)."],
+ ["github","ext",2290,140,"🐙","GitHub + CI","Repositorio privado con integración continua: cada cambio dispara los 92 tests de integridad y el build de la web."],
+
+ /* --- datos --- */
+ ["crm","data",1830,470,"🗃️","CRM (leads.csv)","Un registro por lead con su estado: nuevo → auditado → contactado → seguimiento +3/+7 → cerrado. Vive FUERA del repositorio (RGPD) y nunca se versiona."],
+ ["calendari","data",1830,600,"📅","Calendario .ics","Los seguimientos (+3 y +7 días) de cada envío, exportados como calendario importable en el móvil de Alex."],
+ ["memoria","data",2120,470,"🧠","Memoria persistente","Lo aprendido entre sesiones: decisiones, gotchas técnicos, preferencias. El sistema no empieza de cero cada día."],
+
+ /* --- hooks --- */
+ ["gsend","hook",2400,700,"🛡️","guard_send","Interceptor que bloquea CUALQUIER intento del sistema de enviar emails o WhatsApp reales. El envío solo puede hacerlo Alex, a mano."],
+ ["gpublish","hook",2400,1000,"🛡️","guard_publish","Interceptor que bloquea publicar en redes desde el sistema. El contenido muere en la cola hasta que Alex lo aprueba y programa."],
+ ["webqa","hook",1450,1950,"🛡️","web_qa","Tras cada edición de la web pública, pasa el linter automáticamente: el código con errores no llega ni a commit."],
+ ["mdone","hook",2120,965,"🛡️","motor_done","Cuando el motor termina, avisa: «el paquete del día está listo». Nada acaba en silencio."],
+
+ /* --- infraestructura --- */
+ ["claude","infra",550,1950,"🤖","Claude Code · Opus 4.8 / Fable 5","El runtime: el entorno de agentes de Anthropic donde viven los 27 especialistas, con los modelos Claude como cerebro.",290],
+ ["render","infra",890,1950,"🖥️","Render local 0 €","Chrome headless (PDFs, slides), ffmpeg (vídeo), Piper (voz IA), Whisper (transcripción). Producir una pieza más no cuesta nada.",230],
+ ["repo","infra",1180,1950,"📦","Repo + evals 92/92","Todo versionado en Git. La CI verifica en cada cambio que agentes, skills y bloqueos siguen conectados.",210],
+
+ /* --- salidas --- */
+ ["prospectes","out",2400,470,"📬","80 prospectos","Auditoría + demo + borradores preparados en ~15 localidades. Enviados a mano, uno a uno, con seguimiento agendado."],
+ ["waterfront","out",2400,830,"🍺","The Waterfront","Cliente real: pub irlandés. Web + marca + carta QR + vídeo de anuncio."],
+ ["inmocasa","out",2400,1130,"🏠","Inmocasa","Cliente real: inmobiliaria. Rebranding + web 378 pág./7 idiomas + embudo + compliance."],
+ ["gweb","out",2400,1360,"🌐","gradiangrowth.com","La web propia: 3 idiomas, accesibilidad 100/100, desplegada en CI."],
+ ["gsocial","out",2400,1590,"📱","@gradian.growth","IG + TikTok propios: Gradian es cliente de su propia máquina de contenido (build-in-public)."],
+];
+
+/* ---------- zonas: [x,y,w,h,icono+título,recuento] ---------- */
+const ZONES = [
+ [250,80,2330,120,"🔌 CONEXIONES EXTERNAS","8"],
+ [250,250,2160,100,"⚡ COMANDOS DE ALEX — ASÍ SE DISPARA EL TRABAJO","9"],
+ [300,410,1080,420,"🔭 DESK CAPTACIÓN — LLENA EL PIPELINE","6 agentes + 7 skills"],
+ [300,910,1080,600,"🎬 DESK SOCIAL & REELS — EL ESTUDIO DE CONTENIDO","9 agentes + 11 skills + 1 bucle"],
+ [300,1510,1080,380,"🏠 DESK INMOBILIARIO — VERTICAL COMPLETO","7 agentes + 1 skill"],
+ [1430,410,220,880,"⛩ PUERTAS DE CALIDAD",""],
+ [1720,1180,320,350,"🧪 I+D — SE MEJORA SOLO",""],
+ [420,1890,1000,130,"🧱 INFRAESTRUCTURA","runtime · render · repo"],
+];
+
+/* ---------- aristas: [de, a, tipo, opts?] — opts.lane fuerza el pasillo ---------- */
+const E = [
+ /* entrada y captación */
+ ["negocio","prospector","flow"],["places","prospector","ext"],
+ ["prospector","crm","flow",{lane:395}],["crm","auditor","flow",{lane:430}],
+ ["office","prospector","del"],["office","auditor","del"],["office","webdes","del"],["office","copyw","del"],
+ ["auditor","closer","gate"],["webdes","qa","gate"],["copyw","closer","gate"],["brand","closer","gate"],
+ ["auditor","webdes","flow"],["playwright","webdes","ext"],["playwright","qa","ext"],
+ ["webdes","vercel","ext"],
+ ["s_motorcap","office","del"],["s_gaudit","auditor","del"],["s_compweb","auditor","del"],
+ ["s_demo","webdes","del"],["s_marca","brand","del"],["s_print","brand","del"],["s_sisma","brand","del"],
+ ["s_cro","closer","del"],["s_consell","alex","del"],
+ /* social */
+ ["trend","estratega","flow",{lane:930}],["idea","estratega","flow"],["estratega","scopy","flow"],
+ ["scopy","cardes","flow"],["scopy","vprod","flow",{lane:1055}],["scopy","story","flow"],
+ ["scopy","closer","gate",{lane:880}],
+ ["cardes","ccritic","gate",{lane:1180}],["vprod","rcritic","gate"],["story","qa","gate",{lane:855}],["reledit","qa","gate",{lane:870}],
+ ["sound","vprod","flow"],["factory","vprod","fb"],["rcritic","factory","fb",{lane:1420}],
+ ["fal","vprod","optin"],
+ ["s_estudi","estratega","del"],["s_miner","idea","del"],["s_plani","estratega","del"],
+ ["s_guio","scopy","del"],["s_carr","cardes","del"],["s_video","vprod","del"],["s_veu","vprod","del"],
+ ["s_stories","story","del"],["s_editor","reledit","del"],["s_motorreels","factory","del"],
+ ["s_scheduler","cua","del"],
+ /* inmobiliario */
+ ["iinvest","iweb","del"],["iinvest","icaptador","del"],["iinvest","ianalista","del"],
+ ["iweb","iseo","flow"],["ianalista","icaptador","flow"],["iestager","iweb","flow"],
+ ["icaptador","qa","gate",{lane:1405}],["icompliance","cua","flow",{lane:1440}],["iseo","qa","gate",{lane:1390}],
+ ["s_merch","iestager","del"],
+ /* puertas → cola */
+ ["closer","cua","gate",{lane:700}],["qa","cua","gate",{lane:770}],["rcritic","cua","gate",{lane:940}],["ccritic","cua","gate",{lane:1150}],
+ /* cola → Alex → mundo */
+ ["cua","alex","flow"],["crm","cua","flow"],["cua","calendari","flow",{axis:"v"}],["calendari","alex","flow",{lane:640}],
+ ["cua","drive","ext",{lane:2245}],["memoria","alex","del"],
+ ["alex","gsend","guard",{lane:660}],["gsend","prospectes","guard"],
+ ["alex","gpublish","guard",{lane:990}],["gpublish","gsocial","guard"],
+ ["alex","waterfront","flow"],["alex","inmocasa","flow",{lane:1120}],
+ ["alex","metricool","ext",{lane:2255}],["metricool","gsocial","ext",{lane:2530}],
+ ["vercel","gweb","ext",{lane:2560}],
+ /* comandos → objetivos */
+ ["alex","c_motor","del",{lane:238}],["alex","c_oficina","del",{lane:238}],["alex","c_reels","del",{lane:238}],
+ ["c_motor","office","del"],["c_auditoria","auditor","del",{lane:390}],["c_novademo","webdes","del"],
+ ["c_oficina","office","del",{lane:385}],["c_marca","brand","del"],["c_contingut","estratega","del"],
+ ["c_reels","factory","del"],["c_millora","millora","del"],["c_retro","s_retrosocial","del"],
+ /* I+D / feedback */
+ ["s_retro","millora","del"],["s_retrosocial","millora","del"],["crm","s_retro","fb",{lane:1690}],
+ ["cua","s_retrosocial","fb"],
+ ["millora","estratega","fb",{lane:1545}],["millora","auditor","fb",{lane:860}],["millora","iinvest","fb",{lane:1545}],
+ ["repo","millora","fb"],
+ /* infraestructura */
+ ["claude","office","del",{lane:360}],["context7","claude","ext",{lane:230}],["github","repo","ext",{lane:2545}],
+ ["render","cardes","del",{lane:1470}],["render","vprod","del",{lane:1475}],
+ ["webqa","repo","guard"],["mdone","alex","guard"],
+];
+
+/* =====================================================================
+   RENDER
+===================================================================== */
+const svg = document.getElementById("svgmap");
+const vp = document.getElementById("viewport");
+const XMLNS = "http://www.w3.org/2000/svg";
+const W = 2600, H = 2080;
+
+const pos = {}, meta = {};
+function el(tag, attrs, parent){
+  const e = document.createElementNS(XMLNS, tag);
+  for(const k in attrs) e.setAttribute(k, attrs[k]);
+  (parent||vp).appendChild(e); return e;
+}
+
+/* zonas */
+for(const [x,y,w,h,label,count] of ZONES){
+  el("rect",{x,y,width:w,height:h,class:"zone-rect",rx:20});
+  const t = el("text",{x:x+18,y:y+27,class:"zone-label"}); t.textContent = label;
+  const c = el("text",{x:x+w-16,y:y+27,class:"zone-count","text-anchor":"end"}); c.textContent = count;
+}
+
+function nodeSize(type, label, wOverride){
+  if(wOverride) return [wOverride, type==="alex"||type==="hub"||type==="loop" ? 62 : 48];
+  if(type==="skill") return [Math.max(150, label.length*7.2+42), 30];
+  if(type==="cmd") return [Math.max(112, label.length*8.2+48), 36];
+  if(type==="hook") return [180, 42];
+  if(type==="ext"||type==="data"||type==="out") return [Math.max(150, label.length*7.6+48), 44];
+  if(type==="infra") return [210, 48];
+  return [Math.max(192, label.length*7.9+46), 48]; /* agent */
+}
+
+const edgesG = el("g",{id:"edges"});
+const nodesG = el("g",{id:"nodes"});
+
+for(const [id,type,x,y,icon,label,desc,wo] of N){
+  const [w,h] = nodeSize(type,label,wo);
+  pos[id] = {x,y,w,h};
+  meta[id] = {type,icon,label,desc};
+}
+
+/* ---- ruta ortogonal con esquinas redondeadas (estilo metro) ---- */
+function orthoPath(a,b,opts,i){
+  const A=pos[a], B=pos[b];
+  const dx=B.x-A.x, dy=B.y-A.y;
+  const axis = (opts&&opts.axis) || (Math.abs(dx)>Math.abs(dy) ? "h" : "v");
+  const laneOff = ((i*53)%5-2)*9;
+  const R=13;
+  if(axis==="h"){
+    const mx=(opts&&opts.lane!=null)?opts.lane:(A.x+B.x)/2+laneOff;
+    const s1=Math.sign(mx-A.x)||1, s2=Math.sign(B.x-mx)||1;
+    const x1=A.x+s1*A.w/2, x2=B.x-s2*B.w/2, y1=A.y, y2=B.y;
+    if(Math.abs(y2-y1)<3) return `M${x1} ${y1} L${x2} ${y1}`;
+    const sy=Math.sign(y2-y1);
+    const r1=Math.min(R,Math.abs(mx-x1),Math.abs(y2-y1)/2), r2=Math.min(R,Math.abs(x2-mx),Math.abs(y2-y1)/2);
+    return `M${x1} ${y1} L${mx-s1*r1} ${y1} Q${mx} ${y1} ${mx} ${y1+sy*r1} L${mx} ${y2-sy*r2} Q${mx} ${y2} ${mx+s2*r2} ${y2} L${x2} ${y2}`;
+  } else {
+    const my=(opts&&opts.lane!=null)?opts.lane:(A.y+B.y)/2+laneOff;
+    const s1=Math.sign(my-A.y)||1, s2=Math.sign(B.y-my)||1;
+    const y1=A.y+s1*A.h/2, y2=B.y-s2*B.h/2, x1=A.x, x2=B.x;
+    if(Math.abs(x2-x1)<3) return `M${x1} ${y1} L${x1} ${y2}`;
+    const sx=Math.sign(x2-x1);
+    const r1=Math.min(R,Math.abs(my-y1),Math.abs(x2-x1)/2), r2=Math.min(R,Math.abs(y2-my),Math.abs(x2-x1)/2);
+    return `M${x1} ${y1} L${x1} ${my-s1*r1} Q${x1} ${my} ${x1+sx*r1} ${my} L${x2-sx*r2} ${my} Q${x2} ${my} ${x2} ${my+s2*r2} L${x2} ${y2}`;
+  }
+}
+
+const adj = {};
+const edgeEls = [];
+E.forEach(([a,b,kind,opts],i)=>{
+  if(!pos[a]||!pos[b]){console.warn("edge sin nodo",a,b);return;}
+  const withArrow = kind==="flow"||kind==="gate"||kind==="guard";
+  const p = el("path",{d:orthoPath(a,b,opts,i),class:`edge k-${kind}`,"data-a":a,"data-b":b,
+    ...(withArrow?{"marker-end":"url(#arr)"}:{})},edgesG);
+  edgeEls.push(p);
+  (adj[a]=adj[a]||new Set()).add(b);
+  (adj[b]=adj[b]||new Set()).add(a);
+});
+
+/* nodos: icono + etiqueta */
+for(const [id] of N.map(n=>[n[0]])){
+  const {x,y,w,h} = pos[id]; const m = meta[id];
+  const g = el("g",{class:`node t-${m.type}`,"data-id":id,tabindex:0},nodesG);
+  el("rect",{x:x-w/2,y:y-h/2,width:w,height:h,rx:m.type==="skill"?15:12},g);
+  const pad = m.type==="skill"?10:13;
+  const ico = el("text",{x:x-w/2+pad, y:y+(m.type==="skill"?4:5), class:"n-ico"},g);
+  ico.textContent = m.icon;
+  const t = el("text",{x:x-w/2+pad+(m.type==="skill"?16:24), y:y+4, class:"n-label"},g);
+  t.textContent = m.label;
+}
+
+/* contador */
+const counts = {};
+for(const n of N) counts[n[1]]=(counts[n[1]]||0)+1;
+document.getElementById("mapcount").textContent =
+  `Nodos en el mapa: ${N.length} · conexiones: ${E.length} — agentes ${counts.agent||0} · skills ${counts.skill||0} · comandos ${counts.cmd||0} · bloqueos ${counts.hook||0} · conexiones externas ${counts.ext||0} · datos ${counts.data||0} · salidas ${counts.out||0} · infraestructura ${counts.infra||0} · bucles ${counts.loop||0} · personas/hubs ${(counts.alex||0)+(counts.hub||0)}. Nada se ha quedado fuera.`;
+
+/* leyenda */
+const LEG = [
+ ["agent","#3b4c72","Agentes (27)"],["skill","#64748b","Skills (23)"],["cmd","#4c5f8a","Comandos (9)"],
+ ["hook","#fbbf24","Bloqueos (4)"],["ext","#94a3b8","Externas (8)"],["data","#2DD4BF","Datos (3)"],
+ ["out","#34d399","Salidas (5)"],["infra","#7487b3","Infra (3)"],["loop","#a78bfa","Bucles (1)"],
+];
+const legend = document.getElementById("legend");
+legend.innerHTML = LEG.map(([t,c,l])=>
+ `<label class="lg"><input type="checkbox" checked data-t="${t}"><span class="sw" style="background:${c}"></span>${l}</label>`).join("");
+legend.querySelectorAll("input").forEach(cb=>cb.addEventListener("change",()=>{
+  const t=cb.dataset.t, on=cb.checked;
+  nodesG.querySelectorAll(`.t-${t}`).forEach(n=>n.style.display=on?"":"none");
+  edgeEls.forEach(p=>{
+    const ta=meta[p.dataset.a].type, tb=meta[p.dataset.b].type;
+    const va = legend.querySelector(`input[data-t="${ta}"]`)?.checked ?? true;
+    const vb = legend.querySelector(`input[data-t="${tb}"]`)?.checked ?? true;
+    p.style.display = (va&&vb)?"":"none";
+  });
+}));
+
+/* ---------- interacción ---------- */
+const panel = document.getElementById("npanel"), pbody = document.getElementById("pbody");
+let selected = null;
+function highlight(id){
+  const keep = new Set([id,...(adj[id]||[])]);
+  nodesG.querySelectorAll(".node").forEach(n=>n.classList.toggle("dim",!keep.has(n.dataset.id)));
+  edgeEls.forEach(p=>{
+    const on = p.dataset.a===id || p.dataset.b===id;
+    p.classList.toggle("dim",!on); p.classList.toggle("hi",on);
+  });
+}
+function clearHighlight(){
+  if(selected) return highlight(selected);
+  nodesG.querySelectorAll(".node").forEach(n=>n.classList.remove("dim"));
+  edgeEls.forEach(p=>{p.classList.remove("dim","hi");});
+}
+const TYPENAME = {agent:"Agente",skill:"Skill (procedimiento)",cmd:"Comando de Alex",hook:"Bloqueo automático",
+  ext:"Conexión externa",data:"Datos",out:"Salida / cliente",infra:"Infraestructura",hub:"Punto clave",alex:"El humano",loop:"Bucle autónomo"};
+const TYPECOLOR = {agent:"#818CF8",skill:"#94a3b8",cmd:"#c7d2fe",hook:"#fbbf24",ext:"#94a3b8",data:"#2DD4BF",out:"#34d399",infra:"#7487b3",hub:"#818CF8",alex:"#2DD4BF",loop:"#a78bfa"};
+function openPanel(id){
+  const m = meta[id];
+  const cons = [...(adj[id]||[])].map(c=>`<a data-go="${c}">${meta[c].icon} ${meta[c].label}</a>`).join(" · ");
+  pbody.innerHTML = `<div class="tt" style="color:${TYPECOLOR[m.type]}">${TYPENAME[m.type]}</div>
+    <h3>${m.icon} ${m.label}</h3><p>${m.desc}</p>
+    <div class="cons"><b>Conecta con:</b> ${cons||"—"}</div>`;
+  panel.classList.add("on");
+  pbody.querySelectorAll("[data-go]").forEach(a=>a.addEventListener("click",()=>{select(a.dataset.go);centerOn(a.dataset.go);}));
+}
+function select(id){
+  selected = id;
+  nodesG.querySelectorAll(".node").forEach(n=>n.classList.toggle("sel",n.dataset.id===id));
+  highlight(id); openPanel(id);
+}
+nodesG.addEventListener("mouseover",e=>{const n=e.target.closest(".node"); if(n) highlight(n.dataset.id);});
+nodesG.addEventListener("mouseout",clearHighlight);
+nodesG.addEventListener("click",e=>{const n=e.target.closest(".node"); if(n){select(n.dataset.id); e.stopPropagation();}});
+document.getElementById("pclose").addEventListener("click",()=>{panel.classList.remove("on");selected=null;
+  nodesG.querySelectorAll(".node").forEach(n=>n.classList.remove("sel"));clearHighlight();});
+
+/* ---------- búsqueda ---------- */
+document.getElementById("q").addEventListener("input",e=>{
+  const q=e.target.value.trim().toLowerCase();
+  if(!q){clearHighlight();return;}
+  const hits=new Set(N.filter(n=>n[5].toLowerCase().includes(q)||n[0].includes(q)).map(n=>n[0]));
+  nodesG.querySelectorAll(".node").forEach(n=>n.classList.toggle("dim",!hits.has(n.dataset.id)));
+  edgeEls.forEach(p=>p.classList.add("dim"));
+});
+
+/* ---------- pan & zoom ---------- */
+let vb = {x:0,y:0,w:W,h:H};
+function applyVB(){svg.setAttribute("viewBox",`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);}
+function fit(){vb={x:-20,y:20,w:W+40,h:H+40};applyVB();}
+fit();
+function zoomAt(f, cx, cy){
+  const r = svg.getBoundingClientRect();
+  const px = vb.x + (cx-r.left)/r.width*vb.w;
+  const py = vb.y + (cy-r.top)/r.height*vb.h;
+  const nw = Math.min(Math.max(vb.w*f, 500), W*1.4);
+  const nh = nw*(vb.h/vb.w);
+  vb = {x:px-(px-vb.x)*(nw/vb.w), y:py-(py-vb.y)*(nh/vb.h), w:nw, h:nh};
+  applyVB();
+}
+svg.addEventListener("wheel",e=>{e.preventDefault();zoomAt(e.deltaY>0?1.13:0.885,e.clientX,e.clientY);},{passive:false});
+document.getElementById("zin").onclick=()=>{const r=svg.getBoundingClientRect();zoomAt(.8,r.left+r.width/2,r.top+r.height/2);};
+document.getElementById("zout").onclick=()=>{const r=svg.getBoundingClientRect();zoomAt(1.25,r.left+r.width/2,r.top+r.height/2);};
+document.getElementById("zfit").onclick=fit;
+
+const ptrs = new Map(); let panStart=null, pinchStart=null;
+svg.addEventListener("pointerdown",e=>{
+  svg.setPointerCapture(e.pointerId);
+  ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(ptrs.size===1){panStart={x:e.clientX,y:e.clientY,vb:{...vb}};svg.classList.add("grabbing");}
+  if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinchStart={d:Math.hypot(a.x-b.x,a.y-b.y),vb:{...vb},cx:(a.x+b.x)/2,cy:(a.y+b.y)/2};panStart=null;}
+});
+svg.addEventListener("pointermove",e=>{
+  if(!ptrs.has(e.pointerId))return;
+  ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  const r=svg.getBoundingClientRect();
+  if(ptrs.size===1&&panStart){
+    vb.x=panStart.vb.x-(e.clientX-panStart.x)*vb.w/r.width;
+    vb.y=panStart.vb.y-(e.clientY-panStart.y)*vb.h/r.height;applyVB();
+  } else if(ptrs.size===2&&pinchStart){
+    const [a,b]=[...ptrs.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);
+    const f=pinchStart.d/d; const nw=Math.min(Math.max(pinchStart.vb.w*f,500),W*1.4);
+    const scale=nw/pinchStart.vb.w;
+    const px=pinchStart.vb.x+(pinchStart.cx-r.left)/r.width*pinchStart.vb.w;
+    const py=pinchStart.vb.y+(pinchStart.cy-r.top)/r.height*pinchStart.vb.h;
+    vb={x:px-(px-pinchStart.vb.x)*scale,y:py-(py-pinchStart.vb.y)*scale,w:nw,h:pinchStart.vb.h*scale};applyVB();
+  }
+});
+["pointerup","pointercancel","pointerleave"].forEach(ev=>svg.addEventListener(ev,e=>{
+  ptrs.delete(e.pointerId);
+  if(ptrs.size===0){panStart=null;pinchStart=null;svg.classList.remove("grabbing");}
+}));
+function centerOn(id){
+  const p=pos[id];const nw=Math.min(vb.w,1100),nh=nw*(vb.h/vb.w);
+  vb={x:p.x-nw/2,y:p.y-nh/2,w:nw,h:nh};applyVB();
+}
+
+/* ---------- recorridos animados ---------- */
+function findEdge(a,b){return edgeEls.find(p=>p.dataset.a===a&&p.dataset.b===b);}
+let flowTimer=[];
+function playFlow(path){
+  stopFlow();
+  edgeEls.forEach(p=>p.classList.add("dim"));
+  nodesG.querySelectorAll(".node").forEach(n=>n.classList.add("dim"));
+  path.forEach(([a,b],i)=>{
+    flowTimer.push(setTimeout(()=>{
+      const p=findEdge(a,b)||findEdge(b,a); if(p){p.classList.remove("dim");p.classList.add("pulse");}
+      [a,b].forEach(id=>{const n=nodesG.querySelector(`[data-id="${id}"]`);if(n)n.classList.remove("dim");});
+    }, i*420));
+  });
+  flowTimer.push(setTimeout(stopFlow, path.length*420+4200));
+}
+function stopFlow(){flowTimer.forEach(clearTimeout);flowTimer=[];
+  edgeEls.forEach(p=>p.classList.remove("pulse"));clearHighlight();}
+document.getElementById("flowLead").onclick=()=>playFlow([
+  ["negocio","prospector"],["prospector","crm"],["crm","auditor"],["auditor","webdes"],
+  ["auditor","closer"],["webdes","qa"],["closer","cua"],["qa","cua"],["cua","alex"],
+  ["alex","gsend"],["gsend","prospectes"]]);
+document.getElementById("flowReel").onclick=()=>playFlow([
+  ["trend","estratega"],["idea","estratega"],["estratega","scopy"],["scopy","vprod"],
+  ["sound","vprod"],["vprod","rcritic"],["rcritic","cua"],["cua","alex"],
+  ["alex","gpublish"],["gpublish","gsocial"]]);
+document.getElementById("resetBtn").onclick=()=>{stopFlow();selected=null;panel.classList.remove("on");
+  document.getElementById("q").value="";nodesG.querySelectorAll(".node").forEach(n=>n.classList.remove("sel"));
+  clearHighlight();fit();};
+
+/* ---------- contadores ---------- */
+function runCount(el){
+  if(el.dataset.done)return; el.dataset.done=1;
+  const end=+el.dataset.count,suf=el.dataset.suffix||"";
+  const t0=performance.now(),D=1100;
+  const fmt=v=>v.toLocaleString("es-ES");
+  (function tick(t){const p=Math.min(1,(t-t0)/D),v=Math.round(end*(1-Math.pow(1-p,3)));
+    el.innerHTML=fmt(v)+(suf?`<small>${suf}</small>`:"");
+    if(p<1)requestAnimationFrame(tick);})(t0);
+}
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){runCount(e.target);io.unobserve(e.target);}
+}),{threshold:.5});
+document.querySelectorAll("[data-count]").forEach(el=>io.observe(el));
+setTimeout(()=>document.querySelectorAll("[data-count]").forEach(runCount),2500);
+</script>
+</body>
+</html>
