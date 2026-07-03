@@ -2,7 +2,7 @@
 
 **Una persona dirigiendo una oficina de 27 agentes de IA** que investiga negocios locales y fabrica su
 material de crecimiento — auditorías con la oportunidad en €, webs de demostración con la marca real
-del negocio, identidad, contenido para redes — con una regla no negociable: **nada se envía ni se
+del negocio, identidad, contenido para redes (carruseles de marca, reels con voz IA, stories) — con una regla no negociable: **nada se envía ni se
 publica sin aprobación humana**, garantizado por bloqueos técnicos.
 
 ### 🗺️ [Ver el mapa interactivo →](https://arekusumt.github.io/gradian-sistema/)
@@ -24,6 +24,10 @@ un reel). También está el **[informe completo en PDF (12 páginas)](./gradian-
 | Tokens procesados | **2.483 M** (96,9 % servidos desde caché) |
 | Clientes reales entregados · prospectos preparados | **2** · **80** |
 | Coste marginal por pieza producida | **≈ 0 €** (render local: Chrome, ffmpeg, Piper, Whisper) |
+
+Los dos clientes reales: **[The Waterfront](https://waterfrontirishpub.com)** (pub irlandés — su web nueva
+ya está **en producción**) e **Inmocasa** (inmobiliaria — entregado). El resto de piezas entregadas a ambos
+se implementa durante julio de 2026.
 
 ## Cómo está construido
 
@@ -52,6 +56,8 @@ mapa público del sistema.
 
 An interactive map of a **real agentic system**: one person orchestrating a 27-agent AI office
 (built on Claude Code) that produces sales-ready growth material for local businesses — audits,
-brand-accurate demo websites, identity, social content. Human-in-the-loop by design: technical
+brand-accurate demo websites, identity, social content (carousels, AI-voiced reels, stories). One client
+site is already [live in production](https://waterfrontirishpub.com); the remaining deliverables roll out
+during July 2026. Human-in-the-loop by design: technical
 guardrails physically block any autonomous sending or publishing. Built and shipped in 18 days;
 every number above is measured from the system's own session logs.
