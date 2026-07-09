@@ -1,8 +1,9 @@
 # Gradian — el sistema, por dentro
 
-**Una persona dirigiendo una oficina de 27 agentes de IA** que investiga negocios locales y fabrica su
+**Una persona dirigiendo una oficina de 28 agentes de IA** que investiga negocios locales y fabrica su
 material de crecimiento — auditorías con la oportunidad en €, webs de demostración con la marca real
-del negocio, identidad, contenido para redes (carruseles de marca, reels con voz IA, stories) — con una regla no negociable: **nada se envía ni se
+del negocio, identidad, contenido para redes (carruseles de marca, reels con voz IA, stories) y, desde
+julio de 2026, **automatización de procesos** (línea Gradian Ops) — con una regla no negociable: **nada se envía ni se
 publica sin aprobación humana**, garantizado por bloqueos técnicos.
 
 ### 🗺️ [Ver el mapa interactivo →](https://arekusumt.github.io/gradian-sistema/)
@@ -10,13 +11,13 @@ publica sin aprobación humana**, garantizado por bloqueos técnicos.
 Zoom, búsqueda, filtros por tipo, ficha de cada nodo y recorridos animados (el viaje de un lead y el de
 un reel). También está el **[informe completo en PDF (12 páginas)](./gradian-como-funciona.pdf)**.
 
-![Mapa del sistema Gradian: 86 nodos y 107 conexiones](img/mapa-nodos.png)
+![Mapa del sistema Gradian: 89 nodos y 111 conexiones](img/mapa-nodos.png)
 
 ## El sistema en números — 18 días medidos, no estimados
 
 | | |
 |---|---|
-| Agentes de IA especialistas | **27**, en 3 departamentos (captación · social/reels · inmobiliario) |
+| Agentes de IA especialistas | **28**, en 3 departamentos (captación · social/reels · inmobiliario) |
 | Skills (procedimientos versionados) | **23** |
 | Comandos de operación + bloqueos de seguridad | **9** + **4** hooks (`guard_send`, `guard_publish`…) |
 | Sesiones de trabajo · llamadas al modelo | **74** · **8.312** |
@@ -28,6 +29,13 @@ un reel). También está el **[informe completo en PDF (12 páginas)](./gradian-
 Los dos clientes reales: **[The Waterfront](https://waterfrontirishpub.com)** (pub irlandés — su web nueva
 ya está **en producción**) e **Inmocasa** (inmobiliaria — entregado). El resto de piezas entregadas a ambos
 se implementa durante julio de 2026.
+
+**Lo último (julio 2026): la línea Gradian Ops.** Automatización de los procesos manuales que sangran
+tiempo en un negocio (facturas, mensajes, citas), empaquetada como recetas cerradas con mantenimiento
+mensual. Primer vertical: **gestorías**, con la factura electrónica obligatoria en España (VeriFactu:
+sociedades 1-1-2027, autónomos 1-7-2027) como ventana de entrada — y carril propio en el motor de
+captación, con outreach por email que nace **en pausa** hasta el OK humano. Primera radiografía de
+operaciones ya entregada a un cliente real con dos oficinas.
 
 ## Cómo está construido
 
@@ -54,9 +62,11 @@ mapa público del sistema.
 
 ### English TL;DR
 
-An interactive map of a **real agentic system**: one person orchestrating a 27-agent AI office
+An interactive map of a **real agentic system**: one person orchestrating a 28-agent AI office
 (built on Claude Code) that produces sales-ready growth material for local businesses — audits,
-brand-accurate demo websites, identity, social content (carousels, AI-voiced reels, stories). One client
+brand-accurate demo websites, identity, social content (carousels, AI-voiced reels, stories), and a new
+process-automation line (Gradian Ops: closed "recipes" automating invoices, messages and appointments;
+first vertical: accounting firms, ahead of Spain's 2027 mandatory e-invoicing). One client
 site is already [live in production](https://waterfrontirishpub.com); the remaining deliverables roll out
 during July 2026. Human-in-the-loop by design: technical
 guardrails physically block any autonomous sending or publishing. Built and shipped in 18 days;
