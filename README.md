@@ -27,8 +27,9 @@ un reel). También está el **[informe completo en PDF (12 páginas)](./gradian-
 | Coste marginal por pieza producida | **≈ 0 €** (render local: Chrome, ffmpeg, Piper, Whisper) |
 
 Los dos clientes reales: **[The Waterfront](https://waterfrontirishpub.com)** (pub irlandés — su web nueva
-ya está **en producción**) e **Inmocasa** (inmobiliaria — entregado). El resto de piezas entregadas a ambos
-se implementa durante julio de 2026.
+ya está **en producción**; cómo se hizo, pieza a pieza:
+**[gradian-caso-waterfront](https://github.com/Arekusumt/gradian-caso-waterfront)**) e **Inmocasa**
+(inmobiliaria — entregado). El resto de piezas entregadas a ambos se implementa durante julio de 2026.
 
 **Lo último (julio 2026): la línea Gradian Ops.** Automatización de los procesos manuales que sangran
 tiempo en un negocio (facturas, mensajes, citas), empaquetada como recetas cerradas con mantenimiento
