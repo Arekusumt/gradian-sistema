@@ -36,6 +36,10 @@ ya está **en producción**; cómo se hizo, pieza a pieza:
 **[gradian-caso-waterfront](https://github.com/Arekusumt/gradian-caso-waterfront)**) e **Inmocasa**
 (inmobiliaria — entregado). El resto de piezas entregadas a ambos se implementa durante julio de 2026.
 
+**I+D sobre sí mismo (10 jul 2026):** el sistema investigó agent teams, orquestación
+multi-agente y render de vídeo HTML antes de adoptar nada — con experimentos en vivo,
+cifras citadas y dos veredictos de «todavía no». **[La radiografía completa →](docs/rd-agent-teams-swarms.md)**
+
 **Lo último (julio 2026): la línea Gradian Ops.** Automatización de los procesos manuales que sangran
 tiempo en un negocio (facturas, mensajes, citas), empaquetada como recetas cerradas con mantenimiento
 mensual. Primer vertical: **gestorías**, con la factura electrónica obligatoria en España (VeriFactu:
