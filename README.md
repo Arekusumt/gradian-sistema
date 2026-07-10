@@ -13,6 +13,11 @@ un reel). También está el **[informe completo en PDF (12 páginas)](./gradian-
 
 ![Mapa del sistema Gradian: 89 nodos y 111 conexiones](img/mapa-nodos.png)
 
+Y así se ve **un lead recorriendo el sistema** — de negocio detectado a material enviado, pasando
+por agentes, puertas de calidad y la aprobación humana (grabado del propio mapa):
+
+![El recorrido de un lead por el sistema](img/flujo-lead.gif)
+
 ## El sistema en números — 18 días medidos, no estimados
 
 | | |
@@ -49,6 +54,14 @@ operaciones ya entregada a un cliente real con dos oficinas.
   sistema, con 92 tests de integridad en CI que verifican que nada se rompe.
 - **Todo el mapa es un solo fichero HTML** ([`index.html`](./index.html)): SVG generado por datos —
   añadir un nodo nuevo es una línea.
+
+## El ecosistema: los tres repos se explican entre sí
+
+| Repo | Qué muestra |
+|---|---|
+| **gradian-sistema** (estás aquí) | La fábrica: el mapa interactivo, los roles, los guardarraíles y los números medidos. *El sistema.* |
+| **[gradian-caso-waterfront](https://github.com/Arekusumt/gradian-caso-waterfront)** | Una pieza terminada de esta fábrica: la web de un pub real, en producción, explicada desde las fotos de la carta hasta el deploy. *El resultado.* |
+| **[gradian-match](https://github.com/Arekusumt/gradian-match)** | El mismo patrón (productor ↔ crítico con umbral numérico) aplicado a otro dominio: análisis CV ↔ oferta. *El patrón, transferido.* |
 
 ## Quién
 
