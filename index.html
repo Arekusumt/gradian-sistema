@@ -295,6 +295,7 @@
       <div class="re"><span class="tag">CLIENTE REAL</span><h3>Inmocasa (inmobiliaria)</h3><p>Rebranding + web de 378 páginas en 7 idiomas con motor de fichas premium, embudo de propietarios y kit de compliance. Entregado; implementación durante julio de 2026.</p></div>
       <div class="re"><span class="tag p">PIPELINE</span><h3>80 prospectos preparados</h3><p>Auditorías con la oportunidad en €, demos con la marca real de cada negocio y borradores de contacto listos para revisar.</p></div>
       <div class="re"><span class="tag p">PRODUCTO PROPIO</span><h3>Web + estudio de contenido</h3><p>gradiangrowth.com en 3 idiomas (accesibilidad 100/100) y una fábrica de reels y carruseles que se critica y mejora a sí misma.</p></div>
+      <div class="re"><span class="tag p">PRODUCTO PROPIO</span><h3>Guéridon — la ciencia de la carta</h3><p>Web pública de menu engineering (<a href="https://gueridon.vercel.app" target="_blank" rel="noopener">gueridon.vercel.app</a>): 28 estudios verificados + un analizador de cartas con núcleo determinista testeado y capa de IA con fallback. Lead magnet del carril de hostelería y <a href="https://github.com/Arekusumt/gueridon" target="_blank" rel="noopener">repo público</a>.</p></div>
       <div class="re"><span class="tag p">LÍNEA NUEVA · JUL 2026</span><h3>Gradian Ops — automatización</h3><p>Recetas cerradas que automatizan los procesos manuales que sangran tiempo (facturas, mensajes, citas), con mantenimiento mensual. Primer vertical: gestorías, con la factura electrónica obligatoria (VeriFactu, 2027) como ventana. Primera radiografía de operaciones entregada a un cliente real con dos oficinas.</p></div>
     </div>
   </div>
@@ -436,6 +437,7 @@ const N = [
  ["gweb","out",2400,1360,"🌐","gradiangrowth.com","La web propia: 3 idiomas, accesibilidad 100/100, desplegada en CI."],
  ["gsocial","out",2400,1590,"📱","@gradian.growth","IG + TikTok propios: Gradian es cliente de su propia máquina de contenido (build-in-public)."],
  ["opsline","out",2400,1820,"🧾","Gradian Ops","La línea nueva (julio 2026): automatizar los procesos manuales que sangran tiempo — facturación electrónica (VeriFactu: obligatorio para sociedades el 1-1-2027 y para autónomos el 1-7-2027), mensajes y citas — como recetas cerradas con mantenimiento mensual. Primer vertical: gestorías, con carril propio en el motor de captación. Primera radiografía de operaciones entregada a un cliente real.",170],
+ ["gueridon","out",2400,2050,"🍽️","Guéridon","Producto propio EN VIVO: gueridon.vercel.app — la ciencia de la carta de un restaurante (28 estudios verificados, con sus matices) + un analizador de menús: matriz Kasavana-Smith, psicología de precios y compliance, con núcleo determinista testeado y capa de IA con fallback en cada etapa. Es el lead magnet del carril de hostelería («auditoría de carta») y repo público."],
 ];
 
 /* ---------- zonas: [x,y,w,h,icono+título,recuento] ---------- */
@@ -487,6 +489,7 @@ const E = [
  ["alex","gpublish","guard",{lane:990}],["gpublish","gsocial","guard"],
  ["alex","waterfront","flow"],["alex","inmocasa","flow",{lane:1120}],
  ["alex","instantly","ext",{axis:"v",lane:560}],["alex","opsline","flow"],
+ ["alex","gueridon","flow",{axis:"h",lane:2240}],["vercel","gueridon","ext",{lane:2570}],
  ["alex","metricool","ext",{lane:2255}],["metricool","gsocial","ext",{lane:2530}],
  ["vercel","gweb","ext",{lane:2560}],
  /* comandos → objetivos */
@@ -606,7 +609,7 @@ document.getElementById("mapcount").textContent =
 const LEG = [
  ["agent","#3b4c72","Agentes (28)"],["skill","#64748b","Skills (23)"],["cmd","#4c5f8a","Comandos (9)"],
  ["hook","#fbbf24","Bloqueos (4)"],["ext","#94a3b8","Externas (9)"],["data","#2DD4BF","Datos (3)"],
- ["out","#34d399","Salidas (6)"],["infra","#7487b3","Infra (3)"],["loop","#a78bfa","Bucles (1)"],
+ ["out","#34d399","Salidas (7)"],["infra","#7487b3","Infra (3)"],["loop","#a78bfa","Bucles (1)"],
 ];
 const legend = document.getElementById("legend");
 legend.innerHTML = LEG.map(([t,c,l])=>

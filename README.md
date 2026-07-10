@@ -11,7 +11,7 @@ publica sin aprobación humana**, garantizado por bloqueos técnicos.
 Zoom, búsqueda, filtros por tipo, ficha de cada nodo y recorridos animados (el viaje de un lead y el de
 un reel). También está el **[informe completo en PDF (12 páginas)](./gradian-como-funciona.pdf)**.
 
-![Mapa del sistema Gradian: 89 nodos y 111 conexiones](img/mapa-nodos.png)
+![Mapa del sistema Gradian: 90 nodos y 113 conexiones](img/mapa-nodos.png)
 
 Y así se ve **un lead recorriendo el sistema** — de negocio detectado a material enviado, pasando
 por agentes, puertas de calidad y la aprobación humana (grabado del propio mapa):
@@ -55,13 +55,14 @@ operaciones ya entregada a un cliente real con dos oficinas.
 - **Todo el mapa es un solo fichero HTML** ([`index.html`](./index.html)): SVG generado por datos —
   añadir un nodo nuevo es una línea.
 
-## El ecosistema: los tres repos se explican entre sí
+## El ecosistema: los cuatro repos se explican entre sí
 
 | Repo | Qué muestra |
 |---|---|
 | **gradian-sistema** (estás aquí) | La fábrica: el mapa interactivo, los roles, los guardarraíles y los números medidos. *El sistema.* |
 | **[gradian-caso-waterfront](https://github.com/Arekusumt/gradian-caso-waterfront)** | Una pieza terminada de esta fábrica: la web de un pub real, en producción, explicada desde las fotos de la carta hasta el deploy. *El resultado.* |
 | **[gradian-match](https://github.com/Arekusumt/gradian-match)** | El mismo patrón (productor ↔ crítico con umbral numérico) aplicado a otro dominio: análisis CV ↔ oferta. *El patrón, transferido.* |
+| **[gueridon](https://github.com/Arekusumt/gueridon)** | Un producto propio salido de la fábrica, **[en vivo](https://gueridon.vercel.app)**: la ciencia de la carta de un restaurante + un analizador de menús con núcleo determinista testeado y capa de IA con fallback. Es el lead magnet del carril de hostelería. *El producto.* |
 
 ## Quién
 
@@ -82,6 +83,8 @@ brand-accurate demo websites, identity, social content (carousels, AI-voiced ree
 process-automation line (Gradian Ops: closed "recipes" automating invoices, messages and appointments;
 first vertical: accounting firms, ahead of Spain's 2027 mandatory e-invoicing). One client
 site is already [live in production](https://waterfrontirishpub.com); the remaining deliverables roll out
-during July 2026. Human-in-the-loop by design: technical
+during July 2026. The factory also ships its own products:
+[Guéridon](https://gueridon.vercel.app), a menu-engineering explainer + analyzer (deterministic core,
+agentic shell — [source](https://github.com/Arekusumt/gueridon)). Human-in-the-loop by design: technical
 guardrails physically block any autonomous sending or publishing. Built and shipped in 18 days;
 every number above is measured from the system's own session logs.
