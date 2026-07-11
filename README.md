@@ -1,4 +1,4 @@
-# Gradian — el sistema, por dentro
+﻿# Gradian — el sistema, por dentro
 
 **Una persona dirigiendo una oficina de 28 agentes de IA** que investiga negocios locales y fabrica su
 material de crecimiento — auditorías con la oportunidad en €, webs de demostración con la marca real
@@ -11,7 +11,7 @@ publica sin aprobación humana**, garantizado por bloqueos técnicos.
 Zoom, búsqueda, filtros por tipo, ficha de cada nodo y recorridos animados (el viaje de un lead y el de
 un reel). También está el **[informe completo en PDF (12 páginas)](./gradian-como-funciona.pdf)**.
 
-![Mapa del sistema Gradian: 90 nodos y 113 conexiones](img/mapa-nodos.png)
+![Mapa del sistema Gradian: 91 nodos y 115 conexiones](img/mapa-nodos.png)
 
 Y así se ve **un lead recorriendo el sistema** — de negocio detectado a material enviado, pasando
 por agentes, puertas de calidad y la aprobación humana (grabado del propio mapa):

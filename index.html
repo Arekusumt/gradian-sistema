@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
@@ -346,7 +346,7 @@ const N = [
  ["brand","agent",960,600,"🖌️","brand-designer","La identidad entregable: brand book, brand spec, mockups, logo de redes y piezas de imprenta (tótem-carta QR, QR de reseñas). Siempre en versión limpia + versión muestra."],
 
  /* --- skills captación --- */
- ["s_motorcap","skill",420,720,"⚙","motor-captacio","El procedimiento del bucle diario de captación completo."],
+ ["s_motorcap","skill",420,720,"⚙","motor-captacio","El procedimiento del bucle diario de captación completo. Para lotes de ≥3 leads, un workflow paralelo audita cada lead, somete la cifra de oportunidad a dos verificadores adversarios independientes y solo empaqueta lo que pasa la puerta de conversión (≥80)."],
  ["s_gaudit","skill",690,720,"⚙","generador-auditories","Cómo se construye una auditoría de 8 secciones + teaser."],
  ["s_compweb","skill",960,720,"⚙","comparativa-web","Si ya tienen web: qué están perdiendo, medido (Lighthouse, SEO, conversión)."],
  ["s_demo","skill",420,775,"⚙","demo-web-express","Cómo se monta una demo centrada en conversión, móvil-first."],
@@ -428,7 +428,8 @@ const N = [
  /* --- infraestructura --- */
  ["claude","infra",550,1950,"🤖","Claude Code · Opus 4.8 / Fable 5","El runtime: el entorno de agentes de Anthropic donde viven los 28 especialistas, con los modelos Claude como cerebro.",290],
  ["render","infra",890,1950,"🖥️","Render local 0 €","Chrome headless (PDFs, slides), ffmpeg (vídeo), Piper (voz IA), Whisper (transcripción). Producir una pieza más no cuesta nada.",230],
- ["repo","infra",1180,1950,"📦","Repo + evals 92/92","Todo versionado en Git. La CI verifica en cada cambio que agentes, skills y bloqueos siguen conectados.",210],
+ ["repo","infra",1180,1950,"📦","Repo + evals 122/122","Todo versionado en Git. La CI verifica en cada cambio que agentes, skills y bloqueos siguen conectados.",210],
+ ["hf","infra",890,2062,"🎞️","HyperFrames (Apache 2.0)","Framework open source de HeyGen: HTML+CSS → MP4 determinista, frame a frame. Adoptado tras un A/B ciego del crítico de reels (92 vs 31 frente al camino anterior): los reels de cliente ahora llevan la web REAL del negocio como metraje.",260],
 
  /* --- salidas --- */
  ["prospectes","out",2400,470,"📬","80 prospectos","Auditoría + demo + borradores preparados en ~15 localidades. Enviados a mano, uno a uno, con seguimiento agendado."],
@@ -449,7 +450,7 @@ const ZONES = [
  [300,1510,1080,380,"🏠 DESK INMOBILIARIO — VERTICAL COMPLETO","7 agentes + 1 skill"],
  [1430,410,220,880,"⛩ PUERTAS DE CALIDAD",""],
  [1720,1180,320,350,"🧪 I+D — SE MEJORA SOLO",""],
- [420,1890,1000,130,"🧱 INFRAESTRUCTURA","runtime · render · repo"],
+ [420,1890,1000,220,"🧱 INFRAESTRUCTURA","runtime · render · repo · HyperFrames"],
 ];
 
 /* ---------- aristas: [de, a, tipo, opts?] — opts.lane fuerza el pasillo ---------- */
@@ -505,6 +506,7 @@ const E = [
  /* infraestructura */
  ["claude","office","del",{lane:360}],["context7","claude","ext",{lane:230}],["github","repo","ext",{lane:2545}],
  ["render","cardes","del",{lane:1470}],["render","vprod","del",{lane:1475}],
+ ["hf","render","del"],["hf","vprod","del",{lane:1480}],
  ["webqa","repo","guard"],["mdone","alex","guard"],
 ];
 

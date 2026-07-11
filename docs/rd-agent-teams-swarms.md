@@ -1,4 +1,4 @@
-# I+D sobre sí mismo: agent teams, enjambres y render de vídeo HTML
+﻿# I+D sobre sí mismo: agent teams, enjambres y render de vídeo HTML
 
 *2026-07-10 — cómo este sistema investiga una capacidad nueva antes de adoptarla.*
 
@@ -67,6 +67,35 @@ HyperFrames, juzgado **a ciegas por el crítico visual del sistema con la misma 
 (umbral 80/100)**. Solo si gana con números entra en producción — y el camino actual queda
 de fallback. Así se adopta tecnología aquí: el productor nunca se aprueba a sí mismo.
 
+## Los resultados, medidos — actualización 2026-07-11
+
+Los tres pilotos se ejecutaron al día siguiente. Números reales, no promesas:
+
+**HyperFrames — ADOPTADO tras ganar el A/B ciego.** El mismo reel real (un pub de la Costa
+Daurada, guion y voz idénticos) producido por los dos motores y puntuado a ciegas por el crítico
+visual del sistema con su rúbrica de siempre: **92/100 el piloto HyperFrames · 31/100 el motor
+anterior**. La clave del 92: una escena de *metraje real* — la web viva del cliente scrolleando
+dentro de un móvil — que el crítico verificó con `curl` contra el dominio en producción antes de
+puntuarla. El A/B ciego además destapó un bug real del camino antiguo (una plantilla degradaba en
+silencio a la marca equivocada): **el juez que no sabe qué está juzgando encuentra lo que nadie
+buscaba**. El motor anterior queda de *fallback*; nada se borra.
+
+**El lote de auditorías con verificación adversaria — funciona, y muerde.** Primera tanda real:
+3 negocios locales auditados en paralelo (~30 minutos de reloj, 16 agentes, 5 etapas solapadas).
+Los dos escépticos independientes **refutaron y obligaron a recalcular 2 de las 3 cifras de
+oportunidad** (una bajó de 4.140 a 2.898 €/año; otra de 3.105 a 1.725). La cifra que llega a la
+bandeja de aprobación humana ya no es la del agente entusiasta: es la que sobrevivió a dos
+intentos serios de tumbarla. Bonus operativo: un agente se colgó a mitad de tanda y el lote se
+reanudó desde caché re-ejecutando solo lo pendiente — y cuando el límite de uso cortó la sesión,
+todo lo verificado era recuperable del registro. Los fallos también estaban en el diseño.
+
+**Agent teams — medido, y adoptado solo a medias, a propósito.** Una tanda real con 3
+especialistas en paralelo sobre 3 encargos independientes: **2,5× más rápido en reloj**
+(4 m 46 s contra ~11 m 47 s en serie), ~69k tokens por agente, 2 de 2 materiales de venta
+pasando la puerta de conversión. Veredicto: el patrón de equipo ligero se adopta para tandas de
+3-5 encargos independientes; la beta experimental (7× de coste) sigue fuera hasta que aporte algo
+que este patrón no dé. Saber cuándo no, otra vez.
+
 ## Lo que esto enseña del sistema
 
 - **Investiga antes de adoptar**, con fuentes fechadas y experimentos reproducibles.
@@ -80,7 +109,7 @@ A mediados de 2026 la pregunta interesante ya no es «¿sabes lanzar agentes?» 
 ## ¿Quieres verlo por dentro?
 
 El sistema entero está dibujado en el **[mapa interactivo](https://arekusumt.github.io/gradian-sistema/)**
-(90 nodos, 113 conexiones), y el resto del ecosistema se explica solo: el
+(91 nodos, 115 conexiones), y el resto del ecosistema se explica solo: el
 [caso real en producción](https://github.com/Arekusumt/gradian-caso-waterfront), el
 [patrón transferido a otro dominio](https://github.com/Arekusumt/gradian-match) y el
 [producto vivo](https://github.com/Arekusumt/gueridon). ¿Preguntas sobre cómo se dirige
@@ -105,3 +134,12 @@ workflow-based audit batches with adversarial verification — pilot next; Hyper
 immediate pilot, judged blind by the system's own visual critic at the usual 80/100 gate.
 Mid-2026, the interesting question isn't "can you spawn agents?" — it's "do you know when
 not to?"
+
+**Results (next-day update, 2026-07-11):** HyperFrames **won the blind A/B 92/100 vs 31/100**
+(the winning scene: the client's LIVE website scrolling inside a phone frame — real footage the
+critic verified against the production domain) and is now the optional production path, old
+engine as fallback. The audit-batch workflow ran its first real batch: 3 local businesses in
+~30 wall-clock minutes, with the two adversarial skeptics **refuting and forcing a conservative
+recalculation of 2 out of 3 €-opportunity figures**. The lightweight team pattern measured 2.5×
+faster wall-clock on 3 independent jobs (~69k tokens/agent) and was adopted for 3-5-job batches;
+the experimental 7×-cost beta stays out.
