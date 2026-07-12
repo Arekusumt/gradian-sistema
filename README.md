@@ -1,6 +1,6 @@
 ﻿# Gradian — el sistema, por dentro
 
-**Una persona dirigiendo una oficina de 28 agentes de IA** que investiga negocios locales y fabrica su
+**Una persona dirigiendo una oficina de 29 agentes de IA** que investiga negocios locales y fabrica su
 material de crecimiento — auditorías con la oportunidad en €, webs de demostración con la marca real
 del negocio, identidad, contenido para redes (carruseles de marca, reels con voz IA, stories) y, desde
 julio de 2026, **automatización de procesos** (línea Gradian Ops) — con una regla no negociable: **nada se envía ni se
@@ -22,8 +22,8 @@ por agentes, puertas de calidad y la aprobación humana (grabado del propio mapa
 
 | | |
 |---|---|
-| Agentes de IA especialistas | **28**, en 3 departamentos (captación · social/reels · inmobiliario) |
-| Skills (procedimientos versionados) | **23** |
+| Agentes de IA especialistas | **29**, en 3 departamentos (captación · social/reels · inmobiliario) |
+| Skills (procedimientos versionados) | **24** |
 | Comandos de operación + bloqueos de seguridad | **9** + **4** hooks (`guard_send`, `guard_publish`…) |
 | Sesiones de trabajo · llamadas al modelo | **74** · **8.312** |
 | Delegaciones entre agentes · usos de herramientas | **232** · **10.542** |
@@ -40,7 +40,14 @@ ya está **en producción**; cómo se hizo, pieza a pieza:
 multi-agente y render de vídeo HTML antes de adoptar nada — con experimentos en vivo,
 cifras citadas y dos veredictos de «todavía no». **[La radiografía completa →](docs/rd-agent-teams-swarms.md)**
 
-**Lo último (julio 2026): la línea Gradian Ops.** Automatización de los procesos manuales que sangran
+**Lo último (12 jul 2026): la homepage se convirtió en un mundo scrolleable.** La nueva
+portada de [gradiangrowth.com](https://gradiangrowth.com) es un vuelo de cámara continuo por
+una oficina-diorama generada con IA (Higgsfield: imagen + vídeo con costuras a frame idéntico),
+donde cada isla es un departamento real de este sistema — de un prompt de tres líneas a la web,
+con un workflow de 11 agentes, puertas de gasto y QA numérico de costuras.
+**[El making-of completo, con los 25 prompts →](docs/scroll-world-making-of.md)**
+
+**Antes (julio 2026): la línea Gradian Ops.** Automatización de los procesos manuales que sangran
 tiempo en un negocio (facturas, mensajes, citas), empaquetada como recetas cerradas con mantenimiento
 mensual. Primer vertical: **gestorías**, con la factura electrónica obligatoria en España (VeriFactu:
 sociedades 1-1-2027, autónomos 1-7-2027) como ventana de entrada — y carril propio en el motor de
@@ -55,7 +62,7 @@ operaciones ya entregada a un cliente real con dos oficinas.
 - **Guardarraíles técnicos:** interceptores que bloquean físicamente cualquier envío de email/WhatsApp
   o publicación en redes desde el sistema. La última palabra siempre es de una persona (RGPD desde el diseño).
 - **Auto-mejora:** retrospectivas con datos reales + un agente de I+D que audita y corrige el propio
-  sistema, con 92 tests de integridad en CI que verifican que nada se rompe.
+  sistema, con 122 tests de integridad en CI que verifican que nada se rompe.
 - **Todo el mapa es un solo fichero HTML** ([`index.html`](./index.html)): SVG generado por datos —
   añadir un nodo nuevo es una línea.
 
